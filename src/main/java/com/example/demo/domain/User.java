@@ -1,8 +1,8 @@
-package com.mysite.todo.ToDoList.user;
+package com.example.demo.domain;
 
-import com.mysite.todo.ToDoList.common.Time;
-import com.mysite.todo.ToDoList.todo.TODO;
-import jakarta.persistence.*;
+import javax.persistence.*;
+
+import com.example.demo.common.Time;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -12,25 +12,26 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
+//없는생성자
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends Time {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long userid;
 
     //유저이름
-    private String user_name;
+    private String username;
     //유저이메일
-    private String user_email;
+    private String userEmail;
     //유저의 할일 목록
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<TODO> todoList = new ArrayList<>();
+    private List<Todo> todoList = new ArrayList<>();
 
     public void modifyName(String name){
-        this.user_name = name;
+        this.username = name;
     }
 
 }

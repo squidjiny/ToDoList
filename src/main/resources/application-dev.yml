@@ -1,19 +1,21 @@
+server:
+  port: 8080
+
 spring:
-    h2:
-        console:
-            enabled: true
-            path: /h2-console
-    datasource:
-        url: jdbc:mariadb://192.168.1.253:3306/testdb;
-        driver-class-name: org.mariadb.jdbc.Driver
-        username: sa
-        password: sa
-    jpa:
-        database-platform: org.hibernate.dialect.mariadb53dialect
-        properties:
-            hibernate:
-                dialect: org.hibernate.dialect.H2Dialect
-                show-sql: true
-                format-sql: true
-        hibernate:
-            ddl-auto: create-drop
+  datasource:
+    url: jdbc:mysql://localhost:3333/db_todolist?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: user_todolist
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    cache: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update

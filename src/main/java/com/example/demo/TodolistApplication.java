@@ -1,7 +1,7 @@
-package com.mysite.todo.ToDoList;
+package com.example.demo;
 
-import com.mysite.todo.ToDoList.todo.TODORepository;
-import com.mysite.todo.ToDoList.user.UserRepository;
+import com.example.demo.repository.TodoRepository;
+import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,12 +10,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 @SpringBootApplication
 @RequiredArgsConstructor
-public class ToDoListApplication {
-	private final TODORepository todoRepository;
+public class TodolistApplication {
+	private final TodoRepository todoRepository;
 	private final UserRepository userRepository;
 
 	public static void main(String[] args) {
-		SpringApplication.run(ToDoListApplication.class, args);
+		SpringApplication.run(TodolistApplication.class, args);
 	}
 
 }
