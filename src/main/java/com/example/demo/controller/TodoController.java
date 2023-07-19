@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class TodoController {
     private final TodoService todoService;
 
-    @Operation(summary = "todo api", description = "todo api")
+    @Operation(summary = "todo api", description = "todo(할 일) 들의 생성/삭제/수정/검색 기능을 담당함.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description ="OK!"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST!"),

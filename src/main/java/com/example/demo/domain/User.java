@@ -3,6 +3,7 @@ package com.example.demo.domain;
 import javax.persistence.*;
 
 import com.example.demo.common.Time;
+import com.example.demo.dto.UserDto;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -22,16 +23,21 @@ public class User extends Time {
     private Long userid;
 
     //유저이름
+    @Column(nullable = false)
     private String username;
     //유저이메일
+    @Column(nullable = false)
     private String userEmail;
     //유저의 할일 목록
+
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Todo> todoList = new ArrayList<>();
 
-    public void modifyName(String name){
-        this.username = name;
+
+    public void EditUser(UserDto userDto){
+        this.username = userDto.getUsername();
+        this.userEmail = userDto.getUserEmail();
     }
 
 }

@@ -1,4 +1,5 @@
 package com.example.demo.dto;
+import com.example.demo.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,6 +14,13 @@ public class UserDto {
         this.userid = userid;
         this.username = username;
         this.userEmail =userEmail;
+    }
+
+    public User toEntity(UserDto Userdto){
+        return User.builder()
+                .username(getUsername())
+                .userEmail(getUserEmail())
+                .build();
     }
 
 }
