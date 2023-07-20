@@ -62,9 +62,18 @@ public class TodoService {
         Todo todo = todoRepository.findByTodoId(todoId)
                 .orElseThrow(() -> new RuntimeException());
         todo.EditTODO(todoDto);
+        todoRepository.save(todo);
     }
-    public List<Todo> getUsersAllTodos(){
-        return todoRepository.findAll();
+
+    public List<ShortTodoDto> getUsersAllTodos(long userid){
+        List<Todo> todos = todoRepository.findByUserUserid(userid);
+        List<ShortTodoDto> TodoDtos = new ArrayList<>();
+        for (Todo todo : todos) {
+            ShortTodoDto shortTodoDto = new ShortTodoDto(todo.getTodoTitle(),todo.getStartDate(), todo.getDeadDate() , todo.isImportant());
+            TodoDtos .add(shortTodoDto);
+        }
+
+        return TodoDtos;
     }
 
 }

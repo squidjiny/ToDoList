@@ -63,7 +63,8 @@ public class TodoController {
     @GetMapping("/important/{userid}")
     public ResponseEntity<List<ShortTodoDto>> getImportantTodos(@PathVariable long userid){
         List<ShortTodoDto> todos = todoService.getImportantTodos(userid);
-        return ResponseEntity.ok(todos);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(todos);
     }
 
     //할 일 수정하기
@@ -88,30 +89,31 @@ public class TodoController {
                 })
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(todayTodos);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(todayTodos);
 
     }
 
     //할 일 검색(제목)
-    @GetMapping ("search/title")
-    public ResponseEntity<List<Todo>> getTitleSearch(@RequestParam("keyword") String keyword) {
-        List<Todo> todos = todoService.getUsersAllTodos();
-
-        List<Todo> matchingTodos = todos.stream()
+    @GetMapping ("{userid}/search/title/{keyword}")
+    public ResponseEntity<List<ShortTodoDto>> getTitleSearch(@PathVariable long userid, @PathVariable String keyword) {
+        List<ShortTodoDto> todos = todoService.getUsersAllTodos(userid);
+        List<ShortTodoDto> matchingTodos = todos.stream()
                 .filter(todo -> todo.getTodoTitle().contains(keyword))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(matchingTodos);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(matchingTodos);
     }
     //할 일 검색(설명)
-    @GetMapping("search/Description")
-    public ResponseEntity<List<Todo>> getDescriptionSearch(@RequestParam("keyword") String keyword) {
-        List<Todo> todos = todoService.getUsersAllTodos();
-
-        List<Todo> matchingTodos = todos.stream()
-                .filter(todo -> todo.getTodoDescription().contains(keyword))
+    @GetMapping("{userid}/search/Description/{keyword}")
+    public ResponseEntity<List<ShortTodoDto>> getDescriptionSearch(@PathVariable long userid, @PathVariable String keyword) {
+        List<ShortTodoDto> todos = todoService.getUsersAllTodos(userid);
+        List<ShortTodoDto> matchingTodos = todos.stream()
+                .filter(todo -> todo.getTodoTitle().contains(keyword))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(matchingTodos);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(matchingTodos);
     }
 }

@@ -25,8 +25,10 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
-                .title("스웨거 제목")
-                .description("스웨거 설명")
+                .title("Todolist 스웨거")
+                .description("Todolist 기능을 실험할 수 있는 스웨거." +
+                        "UserController: 회원가입/회원정보수정/회원탈퇴/회원조회"+
+                        "TodoController: 투두 생성/검색/수정. 중요한 일/오늘 할 일 조회")
                 .version("3.0")
                 .build();
     }

@@ -33,7 +33,8 @@ public class UserController {
     @GetMapping("")
     public ResponseEntity<List<UserRequestDto>> getAllUsers() {
         List<UserRequestDto> todos = userService.getAllUsers();
-        return ResponseEntity.ok(todos);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(todos);
     }
 
     //유저 이름으로 검색기능
@@ -45,7 +46,8 @@ public class UserController {
                 .filter(todo -> todo.getUsername().contains(username))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(matchingNames);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(matchingNames);
     }
     //회원가입
     @PostMapping("users/register")
