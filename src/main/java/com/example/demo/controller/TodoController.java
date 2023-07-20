@@ -6,9 +6,11 @@ import com.example.demo.dto.ShortTodoDto;
 import com.example.demo.dto.TodoDto;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.TodoService;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.message.Message;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Tag(name = "TodoController", description = "할 일 API")
 @RestController
-@RequestMapping("/Todos")
+@RequestMapping("/todos")
 @RequiredArgsConstructor
 public class TodoController {
     private final TodoService todoService;
@@ -46,8 +48,8 @@ public class TodoController {
     }
     @Operation(summary = "투두 삭제", description = "todo(할 일) 들의 삭제기능을 담당함. 삭제하고싶은 Todo의 id를 파라미터로 넣으면 그 id를 가진 Todo가 삭제됨.")
     //할 일(투두) 삭제
-    @DeleteMapping("/deleteTodo")
-    public ResponseEntity<String> deleteTodo(@RequestParam long TodoId){
+    @DeleteMapping("/deleteTodo/{TodoId}")
+    public ResponseEntity<String> deleteTodo(@PathVariable long TodoId){
         todoService.deleteTodo(TodoId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("정상적으로 글이 삭제되었습니다.");
@@ -73,7 +75,7 @@ public class TodoController {
 
     //할 일 수정하기
     @Operation(summary = "투두 수정하기", description = "todo(할 일) 들의 수정 기능을 담당함. 수정하고 싶은 투두의 아이디를 넣고 TodoDto 양식에서 수정하고싶은 부분을 수정하고 반환하면 투두가 수정된 양식대로 수정됨.")
-    @PutMapping("{todoId}")
+    @PutMapping("/{todoId}")
     public ResponseEntity<String> EditTodo(@RequestBody TodoDto todoDto,@PathVariable long todoId) {
         todoService.edit(todoId, todoDto);
         return ResponseEntity.status(HttpStatus.OK)
@@ -81,7 +83,7 @@ public class TodoController {
     }
     //오늘 할 일 출력
     @Operation(summary = "오늘 할 일 출력", description = "userid를 파라미터로 넣으면 그 userid가 가지고 있는 투두 중 오늘의 날짜가 시작날과 마감날 사이에 있는 투두를 리스트로 만들어서 투두제목/투두시작날/투두 마감날/중요여부 를 리스트로 반환함.")
-    @GetMapping("today/{userid}")
+    @GetMapping("/today/{userid}")
     public ResponseEntity<List<ShortTodoDto>> getTodayTodos(@PathVariable long userid){
         List<ShortTodoDto> todos = todoService.getAllTodos(userid);
 
@@ -102,10 +104,10 @@ public class TodoController {
 
     //할 일 검색(제목)
     @Operation(summary = "투두 검색(제목)", description = "검색하고 싶은 내용과 유저의 아이디를 파라미터로 넣으면 그 유저가 가지고 있는 투두의 제목에서 검색하고 싶은 내용을 포함하고있는 투두를 리스트로 만들어서 반환함.")
-    @GetMapping ("{userid}/search/title/{keyword}")
-    public ResponseEntity<List<ShortTodoDto>> getTitleSearch(@PathVariable long userid, @PathVariable String keyword) {
-        List<ShortTodoDto> todos = todoService.getUsersAllTodos(userid);
-        List<ShortTodoDto> matchingTodos = todos.stream()
+    @GetMapping ("/title/{userid}/{keyword}")
+    public ResponseEntity<List<TodoDto>> getTitleSearch(@PathVariable long userid, @PathVariable String keyword) {
+        List<TodoDto> todos = todoService.getUsersAllTodos(userid);
+        List<TodoDto> matchingTodos = todos.stream()
                 .filter(todo -> todo.getTodoTitle().contains(keyword))
                 .collect(Collectors.toList());
 
@@ -114,13 +116,12 @@ public class TodoController {
     }
     //할 일 검색(설명)
     @Operation(summary = "투두 검색(투두 설명)", description = "검색하고 싶은 내용과 유저의 아이디를 파라미터로 넣으면 그 유저가 가지고 있는 투두의 설명(description)에서 검색하고 싶은 내용을 포함하고있는 투두를 리스트로 만들어서 반환함.")
-    @GetMapping("{userid}/search/Description/{keyword}")
-    public ResponseEntity<List<ShortTodoDto>> getDescriptionSearch(@PathVariable long userid, @PathVariable String keyword) {
-        List<ShortTodoDto> todos = todoService.getUsersAllTodos(userid);
-        List<ShortTodoDto> matchingTodos = todos.stream()
-                .filter(todo -> todo.getTodoTitle().contains(keyword))
+    @GetMapping("/description/{userid}/{keyword}")
+    public ResponseEntity<List<TodoDto>> getDescriptionSearch(@PathVariable long userid, @PathVariable String keyword) {
+        List<TodoDto> todos = todoService.getUsersAllTodos(userid);
+        List<TodoDto> matchingTodos = todos.stream()
+                .filter(todo -> todo.getTodoDescription().contains(keyword))
                 .collect(Collectors.toList());
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(matchingTodos);
     }

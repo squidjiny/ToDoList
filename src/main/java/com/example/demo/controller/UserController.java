@@ -52,7 +52,7 @@ public class UserController {
     }
     //회원가입
     @Operation(summary = "회원가입", description = "UserDto 양식에 따라 유저 정보를 입력하고 파라미터로 넣으면 그 정보대로 회원가입이 됨.")
-    @PostMapping("users/register")
+    @PostMapping("register")
     public ResponseEntity<String> Register(@RequestBody UserDto userDto){
         userService.Register(userDto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -60,7 +60,7 @@ public class UserController {
     }
     //유저 정보 수정
     @Operation(summary = "유저 정보 수정", description = "수정하고 싶은 유저의 아이디와 UserDto 양식에서 수정하고 싶은 내용을 수정해서 파라미터로 받으면 수정사항이 반영됨.")
-    @PutMapping("users/edit")
+    @PutMapping("edit")
     public ResponseEntity<String> Edit(long userid, @RequestBody UserDto userDto){
         userService.editUser(userid, userDto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -68,7 +68,7 @@ public class UserController {
     }
     //회원탈퇴
     @Operation(summary = "회원탈퇴", description = "탈퇴하고싶은 유저의 id를 넣으면 탈퇴가 왼료됨.")
-    @DeleteMapping("users/withdrawal")
+    @DeleteMapping("withdrawal")
     public ResponseEntity<String> Withdrawal(long userid){
         userService.Withdrawal(userid);
         return ResponseEntity.status(HttpStatus.CREATED)

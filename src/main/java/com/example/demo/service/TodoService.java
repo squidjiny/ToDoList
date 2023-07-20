@@ -65,12 +65,12 @@ public class TodoService {
         todoRepository.save(todo);
     }
 
-    public List<ShortTodoDto> getUsersAllTodos(long userid){
+    public List<TodoDto> getUsersAllTodos(long userid){
         List<Todo> todos = todoRepository.findByUserUserid(userid);
-        List<ShortTodoDto> TodoDtos = new ArrayList<>();
+        List<TodoDto> TodoDtos = new ArrayList<>();
         for (Todo todo : todos) {
-            ShortTodoDto shortTodoDto = new ShortTodoDto(todo.getTodoTitle(),todo.getStartDate(), todo.getDeadDate() , todo.isImportant());
-            TodoDtos .add(shortTodoDto);
+            TodoDto TodoDto = new TodoDto(todo.getTodoTitle(),todo.getTodoDescription(),todo.getStartDate(), todo.getDeadDate() , todo.isImportant());
+            TodoDtos.add(TodoDto);
         }
 
         return TodoDtos;
