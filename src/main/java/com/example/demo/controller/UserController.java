@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.domain.User;
 import com.example.demo.dto.UserDto;
 import com.example.demo.dto.UserRequestDto;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
+    private final UserRepository userRepository;
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description ="OK!"),
@@ -50,14 +52,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(matchingNames);
     }
-    //회원가입
-    @Operation(summary = "회원가입", description = "UserDto 양식에 따라 유저 정보를 입력하고 파라미터로 넣으면 그 정보대로 회원가입이 됨.")
-    @PostMapping("register")
-    public ResponseEntity<String> Register(@RequestBody UserDto userDto){
-        userService.Register(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("회원가입 완료");
-    }
+
     //유저 정보 수정
     @Operation(summary = "유저 정보 수정", description = "수정하고 싶은 유저의 아이디와 UserDto 양식에서 수정하고 싶은 내용을 수정해서 파라미터로 받으면 수정사항이 반영됨.")
     @PutMapping("edit")
@@ -66,14 +61,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("수정완료");
     }
-    //회원탈퇴
-    @Operation(summary = "회원탈퇴", description = "탈퇴하고싶은 유저의 id를 넣으면 탈퇴가 왼료됨.")
-    @DeleteMapping("withdrawal")
-    public ResponseEntity<String> Withdrawal(long userid){
-        userService.Withdrawal(userid);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("회원탈퇴 완료");
-    }
+
+
 
 }
 

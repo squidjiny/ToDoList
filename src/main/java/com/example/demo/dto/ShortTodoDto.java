@@ -21,6 +21,5 @@ public class ShortTodoDto {
         this.deadDate = deadDate;
         this.isImportant = isImportant;
     }
-
 }
 

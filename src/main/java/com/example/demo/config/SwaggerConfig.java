@@ -18,7 +18,7 @@ public class SwaggerConfig {
                 .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.example.demo.controller"))
-                .paths(PathSelectors.ant("/api/**")) // /api로 시작하는 경로만 스캔
+                .paths(PathSelectors.any()) // /api로 시작하는 경로만 스캔
                 .build()
                 .apiInfo(apiInfo());
     }

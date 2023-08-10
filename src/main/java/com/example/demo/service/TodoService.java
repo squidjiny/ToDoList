@@ -72,7 +72,6 @@ public class TodoService {
             TodoDto TodoDto = new TodoDto(todo.getTodoTitle(),todo.getTodoDescription(),todo.getStartDate(), todo.getDeadDate() , todo.isImportant());
             TodoDtos.add(TodoDto);
         }
-
         return TodoDtos;
     }
 

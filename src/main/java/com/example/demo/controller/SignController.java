@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
-
-import com.example.demo.dto.SignUpResultDto;
 import com.example.demo.dto.SignInResultDto;
-import com.example.demo.repository.SignService;
+import com.example.demo.dto.SignUpResultDto;
+import com.example.demo.service.SignService;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,47 +23,51 @@ public class SignController {
     private final SignService signService;
 
     @Autowired
-    public SignController(SignService signService){
+    public SignController(SignService signService) {
         this.signService = signService;
     }
 
     @PostMapping(value = "/sign-in")
-    public SignInResultDto signIn(@ApiParam(value ="ID", required = true) @RequestParam String id,
-                                  @ApiParam(value = "Password", required = true)@RequestParam String password)
-        throws RuntimeException{
-        LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id :{}, pw : ****", id);
+    public SignInResultDto signIn(
+            @ApiParam(value = "ID", required = true) @RequestParam String id,
+            @ApiParam(value = "Password", required = true) @RequestParam String password)
+            throws RuntimeException {
+        LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", id);
         SignInResultDto signInResultDto = signService.signIn(id, password);
 
-        if(signInResultDto.getCode() == 0){
-            LOGGER.info("[signIn] 정상적으로 로그인되었습니다. id: {}, token : {}", id, signInResultDto.getToken());
+        if (signInResultDto.getCode() == 0) {
+            LOGGER.info("[signIn] 정상적으로 로그인되었습니다. id : {}, token : {}", id,
+                    signInResultDto.getToken());
         }
         return signInResultDto;
     }
 
     @PostMapping(value = "/sign-up")
     public SignUpResultDto signUp(
-            @ApiParam(value = "ID", required = true) @RequestParam String userid,
+            @ApiParam(value = "ID", required = true) @RequestParam String id,
             @ApiParam(value = "비밀번호", required = true) @RequestParam String password,
             @ApiParam(value = "이메일", required = true) @RequestParam String email,
-            @ApiParam(value = "권한", required = true) @RequestParam String role){
+            @ApiParam(value = "권한", required = true) @RequestParam String role) {
+        LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****, name : {}, role : {}", id,
+                email, role);
+        SignUpResultDto signUpResultDto = signService.signUp(id, password, email, role);
 
-        SignUpResultDto signUpResultDto = signService.signUp(userid, password, email, role);
-
-        LOGGER.info("회원가입완료");
+        LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", id);
         return signUpResultDto;
     }
 
     @GetMapping(value = "/exception")
-    public void exceptionTest() throws RuntimeException{
-        throw new RuntimeException("접근이 금지되었다");
+    public void exceptionTest() throws RuntimeException {
+        throw new RuntimeException("접근이 금지되었습니다.");
     }
 
     @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<Map<String, String>> ExceptionHandler(RuntimeException e){
+    public ResponseEntity<Map<String, String>> ExceptionHandler(RuntimeException e) {
         HttpHeaders responseHeaders = new HttpHeaders();
+        //responseHeaders.add(HttpHeaders.CONTENT_TYPE, "application/json");
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 
-        LOGGER.error("ExceptionHandler 호출");
+        LOGGER.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
 
         Map<String, String> map = new HashMap<>();
         map.put("error type", httpStatus.getReasonPhrase());

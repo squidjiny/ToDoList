@@ -5,14 +5,19 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.dto.UserRequestDto;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService{
     private final UserRepository userRepository;
 
     //모든 유저 표시
@@ -29,12 +34,15 @@ public class UserService {
     public List<User> getAllUserinfo(){
         return userRepository.findAll();
     }
-    //유저 회원가입
-    public void Register(UserDto userDto){
-        User user = userDto.toEntity(userDto);
-        userRepository.save(user);
-    }
 
+
+//    //유저 회원가입
+//    public void Register(UserDto userDto){
+//        User user = userDto.toEntity(userDto);
+//        userRepository.save(user);
+//    }
+
+    //유저 수정
     public void editUser(Long userid, UserDto userDto){
         User user = userRepository.findByUserid(userid)
                 .orElseThrow(() -> new RuntimeException());
@@ -47,5 +55,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException());
         userRepository.delete(user);
     }
+
+
 }
 

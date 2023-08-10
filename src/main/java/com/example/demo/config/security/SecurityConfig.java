@@ -1,24 +1,21 @@
-package com.example.demo.config;
+package com.example.demo.config.security;
 
-import com.example.demo.domain.CustomAccessDeniedHandler;
-import com.example.demo.domain.CustomAuthenticationEntryPoint;
-import com.example.demo.domain.JwtProvider;
-import com.example.demo.domain.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+public class SecurityConfig{
 
     private final JwtProvider jwtProvider;
 
@@ -27,22 +24,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.jwtProvider = jwtProvider;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        http.httpBasic().disable()
+    @Bean
+    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception{
+        httpSecurity.httpBasic().disable()
 
                 .csrf().disable()
 
                 .sessionManagement()
                 .sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS
-                )
+                        SessionCreationPolicy.STATELESS)
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/sign-api/sign-in", "/sign-api/sign-up", "/sign-api/exception").permitAll()
-                //.antMatchers(HttpMethod.GET, "/product/**").permitAll()
-
+                .antMatchers("/sign-api/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/product/**").permitAll()
+                .antMatchers("/v3/api-docs", "/configuration/ui",
+                        "/swagger-resources/**", "/configuration/**", "/swagger-ui/**", "/webjars/**").permitAll()
                 .antMatchers("**exception**").permitAll()
                 .anyRequest().hasRole("ADMIN")
                 .and()
@@ -51,12 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
 
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
+                        UsernamePasswordAuthenticationFilter.class);
+        return httpSecurity.build();
     }
-    @Override
-    public void configure(WebSecurity webSecurity){
-        webSecurity.ignoring().antMatchers("/v2/api-docs", "/configuration/ui",
-                "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**");
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
-
 }
