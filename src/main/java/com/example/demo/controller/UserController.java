@@ -25,15 +25,13 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description ="OK!"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST!"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND!"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR!")
-    })
     //모든 유저 출력
     @Operation(summary = "모든 유저 출력", description = "서비스에 가입되어있는 모든 유저를 출력함.")
     @GetMapping("")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "유저 출력 성공"),
+            @ApiResponse(responseCode = "403", description = "조회 권한이 없습니다.")
+    })
     public ResponseEntity<List<UserRequestDto>> getAllUsers() {
         List<UserRequestDto> todos = userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK)
@@ -43,6 +41,10 @@ public class UserController {
     //유저 이름으로 검색기능
     @Operation(summary = "유저 이름 검색", description = "이름을 파라미터로 받으면 유저의 투두를 출력함")
     @GetMapping("search/{username}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "유저 조회 성공"),
+            @ApiResponse(responseCode = "404", description = "동일한 유저가 없습니다."),
+    })
     public ResponseEntity<List<User>> SearchUsers(@PathVariable String username) {
         List<User> todos = userService.getAllUserinfo();
 
@@ -61,7 +63,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("수정완료");
     }
-
 
 
 }

@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.SignInResultDto;
-import com.example.demo.dto.SignUpResultDto;
+import com.example.demo.dto.LoginRequestDto;
+import com.example.demo.dto.UserDto;
 import com.example.demo.service.SignService;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,33 +31,31 @@ public class SignController {
         this.signService = signService;
     }
 
-    @PostMapping(value = "/sign-in")
-    public SignInResultDto signIn(
-            @ApiParam(value = "ID", required = true) @RequestParam String id,
-            @ApiParam(value = "Password", required = true) @RequestParam String password)
-            throws RuntimeException {
-        LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", id);
-        SignInResultDto signInResultDto = signService.signIn(id, password);
 
-        if (signInResultDto.getCode() == 0) {
-            LOGGER.info("[signIn] 정상적으로 로그인되었습니다. id : {}, token : {}", id,
-                    signInResultDto.getToken());
-        }
-        return signInResultDto;
+
+    @PostMapping(value = "/sign-in")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "로그인 성공"),
+            @ApiResponse(responseCode = "400", description = "아이디 혹은 비밀번호가 틀렸습니다."),
+    })
+    public ResponseEntity<String> signIn(@Valid @RequestBody LoginRequestDto loginRequestDto)
+            throws RuntimeException {
+        LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", loginRequestDto.getUsername());
+        signService.signIn(loginRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body("로그인 성공");
     }
 
     @PostMapping(value = "/sign-up")
-    public SignUpResultDto signUp(
-            @ApiParam(value = "ID", required = true) @RequestParam String id,
-            @ApiParam(value = "비밀번호", required = true) @RequestParam String password,
-            @ApiParam(value = "이메일", required = true) @RequestParam String email,
-            @ApiParam(value = "권한", required = true) @RequestParam String role) {
-        LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****, name : {}, role : {}", id,
-                email, role);
-        SignUpResultDto signUpResultDto = signService.signUp(id, password, email, role);
-
-        LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", id);
-        return signUpResultDto;
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "회원가입 성공"),
+            @ApiResponse(responseCode = "400", description = "동일한 아이디가 존재합니다."),
+            @ApiResponse(responseCode = "400", description = "이메일 형식이 틀렸습니다.")
+    })
+    public ResponseEntity<String> signUp(@Valid @RequestBody UserDto userDto) {
+        LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****, role : {}", userDto.getUsername(), userDto.getRole());
+        signService.signUp(userDto);
+        LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", userDto.getUsername());
+        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입을 성공했습니다.");
     }
 
     @GetMapping(value = "/exception")

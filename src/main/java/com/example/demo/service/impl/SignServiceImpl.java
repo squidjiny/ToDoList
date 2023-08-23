@@ -1,10 +1,9 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.common.CommonResponse;
 import com.example.demo.config.security.JwtProvider;
 import com.example.demo.domain.User;
-import com.example.demo.dto.SignInResultDto;
-import com.example.demo.dto.SignUpResultDto;
+import com.example.demo.dto.LoginRequestDto;
+import com.example.demo.dto.UserDto;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.SignService;
 import org.slf4j.Logger;
@@ -12,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Service
 public class SignServiceImpl implements SignService {
@@ -33,74 +30,28 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public SignUpResultDto signUp(String id, String password, String email, String role) {
+    public void signUp(UserDto userDto) {
         LOGGER.info("[getSignUpResult] 회원 가입 정보 전달");
         User user;
-        if (role.equalsIgnoreCase("admin")) {
-            user = User.builder()
-                    .username(id)
-                    .password(passwordEncoder.encode(password))
-                    .userEmail(email)
-                    .roles(Collections.singletonList("ROLE_ADMIN"))
-                    .build();
-        } else {
-            user = User.builder()
-                    .username(id)
-                    .password(passwordEncoder.encode(password))
-                    .userEmail(email)
-                    .roles(Collections.singletonList("ROLE_USER"))
-                    .build();
-        }
+        String password = passwordEncoder.encode(userDto.getPassword());
+        user = userDto.toEntity(userDto, password);
 
-        User savedUser = userRepository.save(user);
-        SignUpResultDto signUpResultDto = new SignInResultDto();
+        userRepository.save(user);
 
-        LOGGER.info("[getSignUpResult] userEntity 값이 들어왔는지 확인 후 결과값 주입");
-        if (!savedUser.getUsername().isEmpty()) {
-            LOGGER.info("[getSignUpResult] 정상 처리 완료");
-            setSuccessResult(signUpResultDto);
-        } else {
-            LOGGER.info("[getSignUpResult] 실패 처리 완료");
-            setFailResult(signUpResultDto);
-        }
-        return signUpResultDto;
     }
 
     @Override
-    public SignInResultDto signIn(String id, String password) throws RuntimeException {
+    public void signIn(LoginRequestDto loginRequestDto) throws RuntimeException {
         LOGGER.info("[getSignInResult] signDataHandler 로 회원 정보 요청");
-        User user = userRepository.getByUsername(id);
-        LOGGER.info("[getSignInResult] Id : {}", id);
+        User user = userRepository.getByUsername(loginRequestDto.getUsername());
+        LOGGER.info("[getSignInResult] Id : {}", loginRequestDto.getUsername());
 
         LOGGER.info("[getSignInResult] 패스워드 비교 수행");
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
             throw new RuntimeException();
         }
         LOGGER.info("[getSignInResult] 패스워드 일치");
-
-        LOGGER.info("[getSignInResult] SignInResultDto 객체 생성");
-        SignInResultDto signInResultDto = SignInResultDto.builder()
-                .token(jwtProvider.createToken(String.valueOf(user.getUsername()),
-                        user.getRoles()))
-                .build();
-
-        LOGGER.info("[getSignInResult] SignInResultDto 객체에 값 주입");
-        setSuccessResult(signInResultDto);
-
-        return signInResultDto;
+        jwtProvider.createToken(user.getUsername(), user.getRoles());
     }
 
-    // 결과 모델에 api 요청 성공 데이터를 세팅해주는 메소드
-    private void setSuccessResult(SignUpResultDto result) {
-        result.setSuccess(true);
-        result.setCode(CommonResponse.SUCCESS.getCode());
-        result.setMsg(CommonResponse.SUCCESS.getMsg());
-    }
-
-    // 결과 모델에 api 요청 실패 데이터를 세팅해주는 메소드
-    private void setFailResult(SignUpResultDto result) {
-        result.setSuccess(false);
-        result.setCode(CommonResponse.FAIL.getCode());
-        result.setMsg(CommonResponse.FAIL.getMsg());
-    }
 }

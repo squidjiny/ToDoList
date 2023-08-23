@@ -1,14 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.SignInResultDto;
-import com.example.demo.dto.SignUpResultDto;
+import com.example.demo.dto.LoginRequestDto;
+import com.example.demo.dto.UserDto;
 
 
 // 예제 13.24
 public interface SignService {
 
-    SignUpResultDto signUp(String id, String password, String email, String role);
+    void signUp(UserDto userDto);
 
-    SignInResultDto signIn(String id, String password) throws RuntimeException;
+    void signIn(LoginRequestDto loginRequestDto) throws RuntimeException;
 
 }
