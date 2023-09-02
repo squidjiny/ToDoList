@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @Builder
-//없는생성자
+//매개변수가 없는생성자
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends Time implements UserDetails {
@@ -45,11 +45,10 @@ public class User extends Time implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Todo> todoList = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(nullable = false)
     private List<String> roles = new ArrayList<>();
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

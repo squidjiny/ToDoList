@@ -38,10 +38,10 @@ public class SecurityConfig{
                 .and()
                 .authorizeRequests()
                 .antMatchers("/sign-api/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/product/**").permitAll()
                 .antMatchers("/v3/api-docs", "/configuration/ui",
                         "/swagger-resources/**", "/configuration/**", "/swagger-ui/**", "/webjars/**").permitAll()
                 .antMatchers("**exception**").permitAll()
+                .antMatchers("/users/**", "/todos/**").hasRole("USER")
                 .anyRequest().hasRole("ADMIN")
                 .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())

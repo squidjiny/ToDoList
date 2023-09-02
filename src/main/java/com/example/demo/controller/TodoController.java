@@ -6,21 +6,17 @@ import com.example.demo.dto.ShortTodoDto;
 import com.example.demo.dto.TodoDto;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.TodoService;
-import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.message.Message;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +40,7 @@ public class TodoController {
                 .body("생성완료");
     }
     @Operation(summary = "투두 삭제", description = "todo(할 일) 들의 삭제기능을 담당함. 삭제하고싶은 Todo의 id를 파라미터로 넣으면 그 id를 가진 Todo가 삭제됨.")
-    @DeleteMapping("/deleteTodo/{TodoId}")
+    @DeleteMapping("/{TodoId}")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "투두리스트 삭제 성공"),
             @ApiResponse(responseCode = "404", description = "삭제하려는 투두리스트가 없습니다"),

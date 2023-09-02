@@ -41,8 +41,8 @@ public class SignController {
     public ResponseEntity<String> signIn(@Valid @RequestBody LoginRequestDto loginRequestDto)
             throws RuntimeException {
         LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", loginRequestDto.getUsername());
-        signService.signIn(loginRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body("로그인 성공");
+        String token = signService.signIn(loginRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body("로그인 성공 \ntoken : " + token);
     }
 
     @PostMapping(value = "/sign-up")
@@ -52,7 +52,7 @@ public class SignController {
             @ApiResponse(responseCode = "400", description = "이메일 형식이 틀렸습니다.")
     })
     public ResponseEntity<String> signUp(@Valid @RequestBody UserDto userDto) {
-        LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****, role : {}", userDto.getUsername(), userDto.getRole());
+        LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****", userDto.getUsername());
         signService.signUp(userDto);
         LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", userDto.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입을 성공했습니다.");

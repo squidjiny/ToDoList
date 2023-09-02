@@ -41,7 +41,7 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public void signIn(LoginRequestDto loginRequestDto) throws RuntimeException {
+    public String signIn(LoginRequestDto loginRequestDto) throws RuntimeException {
         LOGGER.info("[getSignInResult] signDataHandler 로 회원 정보 요청");
         User user = userRepository.getByUsername(loginRequestDto.getUsername());
         LOGGER.info("[getSignInResult] Id : {}", loginRequestDto.getUsername());
@@ -51,7 +51,8 @@ public class SignServiceImpl implements SignService {
             throw new RuntimeException();
         }
         LOGGER.info("[getSignInResult] 패스워드 일치");
-        jwtProvider.createToken(user.getUsername(), user.getRoles());
+        String token = jwtProvider.createToken(user.getUsername(), user.getRoles());
+        return token;
     }
 
 }

@@ -60,7 +60,6 @@ public class JwtProvider {
         LOGGER.info("[createToken] 토큰 생성 완료");
         return token;
     }
-    //주원아 저리가,,,
 
     public Authentication getAuthentication(String token) {
         LOGGER.info("[getAuthentication] 토큰 인증 정보 조회 시작");

@@ -11,13 +11,13 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.naming.Reference;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.sun.xml.bind.v2.model.core.PropertyKind.REFERENCE;
 
 @Configuration
 public class SwaggerConfig {
-    private static final String REFERENCE = "Authorization 헤더 값";
 
     @Bean
     public Docket api(){
@@ -28,8 +28,8 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any()) // /api로 시작하는 경로만 스캔
                 .build()
                 .apiInfo(apiInfo())
-                .securityContexts(List.of(securityContext()))
-                .securitySchemes(List.of(bearerAuthSecurityScheme()));
+                .securityContexts(Arrays.asList(securityContext()))
+                .securitySchemes(Arrays.asList(apiKey()));
     }
 
     private ApiInfo apiInfo(){
@@ -42,6 +42,11 @@ public class SwaggerConfig {
                 .build();
 
     }
+
+    private ApiKey apiKey() {
+        return new ApiKey("X-AUTH-TOKEN", "X-AUTH-TOKEN", "header");
+    }
+
     private SecurityContext securityContext() {
         return springfox.documentation
                 .spi.service.contexts
@@ -52,10 +57,11 @@ public class SwaggerConfig {
                 .build();
     }
 
-    private List<SecurityReference> defaultAuth(){
+    List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = new AuthorizationScope("global", "accessEverything");
-        return List.of(new SecurityReference(REFERENCE, authorizationScopes));
+        authorizationScopes[0] = authorizationScope;
+        return Arrays.asList(new SecurityReference("X-AUTH-TOKEN", authorizationScopes));
     }
 
 //    private ApiKey securityScheme(){
@@ -63,7 +69,7 @@ public class SwaggerConfig {
 //        return new ApiKey(REFERENCE, targetHeader, "header");
 //    }
 
-    private HttpAuthenticationScheme bearerAuthSecurityScheme(){
-        return HttpAuthenticationScheme.JWT_BEARER_BUILDER.name(REFERENCE).build();
-    }
+//    private HttpAuthenticationScheme bearerAuthSecurityScheme(){
+//        return HttpAuthenticationScheme.JWT_BEARER_BUILDER.name(REFERENCE).build();
+//    }
 }

@@ -9,6 +9,6 @@ public interface SignService {
 
     void signUp(UserDto userDto);
 
-    void signIn(LoginRequestDto loginRequestDto) throws RuntimeException;
+    String signIn(LoginRequestDto loginRequestDto) throws RuntimeException;
 
 }
