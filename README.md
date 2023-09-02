@@ -23,7 +23,7 @@ Spring boot 연습용으로 만든 투두리스트입니다.
 | 2 | GET | /users/{user_id} | 유저 검색 | user_id: 검색하고싶은 유저의 아이디 |  |  |  |
 | 3 | GET | /users/friend_list/{user_id} | 친구 목록 조회 | user_id |  |  |  |
 | 4 | POST | /sign-api/sign-up | 회원가입 | 유저 이름,  유저 이메일 비밀번호, |  |  |  |
-| 5 | DELETE | /users/register_out/{user_id} | 회원탈퇴 | 유저 아이디, 유저 비밀번호 |  |  |  |
+| 5 | DELETE | /users/register_out/{user_id} | 회원탈퇴 | 유저 아이디, 유저 비밀번호 |  |  | 미구현 |
 | 6 | POST | /sign-api/sign_in | 로그인 | 유저 아이디, 유저 비밀번호 |  |  |  |
 | 7 | PUT | /users/{user_id} | 유저정보 수정 | 유저 아이디, 유저 비밀번호 |  |  |  |
 
@@ -38,14 +38,14 @@ Spring boot 연습용으로 만든 투두리스트입니다.
 | 3 | GET | /TODO/{todo_id} | 중요한 일 조회  | 중요한 일 여부에 체크가 되어 있는가.(bool) |  |  |  |
 | 4 | GET | /TODO/{title} | 할 일 검색(제목) | title: 검색하고 싶은 제목 |  |  |  |
 | 5 | GET | /TODO/{discription} | 할 일 검색(설명) | discription: 설명들 안에서 검색하고 싶은 내용 |  |  |  |
-| 6 | GET | /TODO/{word} | 할 일 검색 (전체 검색) | word: 제목+내용에서 검색하고 싶은 것 |  |  |  |
+| 6 | GET | /TODO/{word} | 할 일 검색 (전체 검색) | word: 제목+내용에서 검색하고 싶은 것 |  |  | 미구현 |
 | 7 | POST | /TODO/{user_id} | 할 일 생성 | user_id: 투두리스트를 만드려고 하는 유저의 아이디 |  |  |  |
 | 8 | PUT | /TODO/{todo_id} | 할 일 수정 | todo_id: 투두리스트의 아아디 |  |  |  |
 | 9 | DELETE | /TODO/{todo_id} | 할 일 삭제 | todo_id |  |  |  |
 
 ---
 
--친구 API
+-친구 API(미구현)
 
 | INDEX | HTTP METHOD | URI(end point) | Description | Request Parameters | Response Parameters | HTTP Status | etc. |
 | --- | --- | --- | --- | --- | --- | --- | --- |
