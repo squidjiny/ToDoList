@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,19 @@ import java.util.stream.Collectors;
 @Tag(name = "TodoController", description = "할 일 API")
 @RestController
 @RequestMapping("/todos")
-@RequiredArgsConstructor
 public class TodoController {
+
+
     private final TodoService todoService;
 
+    /*
+    @RequireArgument, @AllArgumentConstructor, @NoArgumentConstructor 를 상황에 따라 쓸 수 있으나
+    처음 해보는 단계이기 때문에 눈에 잘 보이는 형식으로 의존성을 주입한다.
+    */
+    @Autowired
+    public TodoController(TodoService todoService){
+        this.todoService = todoService;
+    }
 
     @Operation(summary = "투두 생성", description = "todo(할 일)의 생성 기능을 담당함. TodoDto를 body로 씀. userid와 todoDto(투두리스트 요구사항)을 파라미터로 넣으면 userid의 투두리스트에 투두가 추가됨.")
     @PostMapping()

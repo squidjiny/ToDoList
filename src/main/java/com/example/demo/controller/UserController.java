@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final UserRepository userRepository;
+
+    @Autowired
+    public UserController(UserService userService){
+        this.userService = userService;
+    }
 
     //모든 유저 출력
     @Operation(summary = "모든 유저 출력", description = "서비스에 가입되어있는 모든 유저를 출력함.")

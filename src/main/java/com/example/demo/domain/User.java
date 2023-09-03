@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @Builder
-//매개변수가 없는생성자
+//매개변수가 없는 생성자
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends Time implements UserDetails {
@@ -39,8 +39,8 @@ public class User extends Time implements UserDetails {
     //유저이메일
     @Column(nullable = false)
     private String userEmail;
-    //유저의 할일 목록
 
+    //유저의 할일 목록
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Todo> todoList = new ArrayList<>();

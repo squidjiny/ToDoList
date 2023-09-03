@@ -9,6 +9,7 @@ import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -19,11 +20,16 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class TodoService {
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
 
+
+    @Autowired
+    public TodoService(TodoRepository todoRepository, UserRepository userRepository){
+        this.todoRepository = todoRepository;
+        this.userRepository = userRepository;
+    }
 
     public void save(long userid, TodoDto todoDto){
         User user = userRepository.findByUserid(userid)

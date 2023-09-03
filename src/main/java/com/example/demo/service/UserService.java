@@ -3,8 +3,10 @@ package com.example.demo.service;
 import com.example.demo.domain.User;
 import com.example.demo.dto.UserDto;
 import com.example.demo.dto.UserRequestDto;
+import com.example.demo.dto.UserResponseDto;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,10 +18,13 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
-@RequiredArgsConstructor
 public class UserService{
     private final UserRepository userRepository;
 
+    @Autowired
+    public UserService(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
     //모든 유저 표시
     public List<UserRequestDto> getAllUsers() {
         List<User> allUsers = userRepository.findAll();

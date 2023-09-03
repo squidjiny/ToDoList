@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LoginRequestDto;
 import com.example.demo.dto.UserDto;
+import com.example.demo.dto.UserResponseDto;
 import com.example.demo.service.SignService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,6 +26,11 @@ public class SignController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SignController.class);
     private final SignService signService;
+
+    /*
+    @RequireArgument, @AllArgumentConstructor, @NoArgumentConstructor 를 상황에 따라 쓸 수 있으나
+    처음 해보는 단계이기 때문에 눈에 잘 보이는 형식으로 의존성을 주입한다.
+    */
 
     @Autowired
     public SignController(SignService signService) {
@@ -51,11 +57,11 @@ public class SignController {
             @ApiResponse(responseCode = "400", description = "동일한 아이디가 존재합니다."),
             @ApiResponse(responseCode = "400", description = "이메일 형식이 틀렸습니다.")
     })
-    public ResponseEntity<String> signUp(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<UserResponseDto> signUp(@Valid @RequestBody UserDto userDto) {
         LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****", userDto.getUsername());
-        signService.signUp(userDto);
+        UserResponseDto responseDto = signService.signUp(userDto);
         LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", userDto.getUsername());
-        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입을 성공했습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping(value = "/exception")
