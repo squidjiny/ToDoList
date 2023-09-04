@@ -33,7 +33,7 @@ Spring boot 연습용으로 만든 투두리스트입니다.
 
 | INDEX | HTTP METHOD | URI(end point) | Description | Request Parameters | Response Parameters | HTTP Status | etc. |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | GET | /TODO/{today} | 오늘 할 일 조회 | todo의 start날짜와 end 날짜의 사이에 오늘의 날짜가 있는가. |  |  |  |
+| 1 | GET | /TODO/{userid} | 오늘 할 일 조회 | todo의 start날짜와 end 날짜의 사이에 오늘의 날짜가 있는가. |  |  |  |
 | 2 | GET | /TODO | 할일 전체 조회 | 없음. |  |  |  |
 | 3 | GET | /TODO/{todo_id} | 중요한 일 조회  | 중요한 일 여부에 체크가 되어 있는가.(bool) |  |  |  |
 | 4 | GET | /TODO/{title} | 할 일 검색(제목) | title: 검색하고 싶은 제목 |  |  |  |
