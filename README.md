@@ -21,7 +21,7 @@ Spring boot 연습용으로 만든 투두리스트입니다.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | GET | /users | 유저 전체 표기 | 없음 |  |  |  |
 | 2 | GET | /users/{user_id} | 유저 검색 | user_id: 검색하고싶은 유저의 아이디 |  |  |  |
-| 3 | GET | /users/friend_list/{user_id} | 친구 목록 조회 | user_id |  |  |  |
+| 3 | GET | /users/friend_list/{user_id} | 친구 목록 조회 | user_id |  |  | 미구현 |
 | 4 | POST | /sign-api/sign-up | 회원가입 | 유저 이름,  유저 이메일 비밀번호, |  |  |  |
 | 5 | DELETE | /users/register_out/{user_id} | 회원탈퇴 | 유저 아이디, 유저 비밀번호 |  |  | 미구현 |
 | 6 | POST | /sign-api/sign_in | 로그인 | 유저 아이디, 유저 비밀번호 |  |  |  |
