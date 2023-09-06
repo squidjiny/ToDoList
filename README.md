@@ -21,7 +21,7 @@ Spring boot 연습용으로 만든 투두리스트입니다.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | GET | /users | 유저 전체 표기 | 없음 |  |  |  |
 | 2 | GET | /users/{user_id} | 유저 검색 | user_id: 검색하고싶은 유저의 아이디 |  |  |  |
-| 3 | GET | /users/friend_list/{user_id} | 친구 목록 조회 | user_id |  |  |  |
+| 3 | GET | /users/friend_list/{user_id} | 친구 목록 조회 | user_id |  |  | 미구현 |
 | 4 | POST | /sign-api/sign-up | 회원가입 | 유저 이름,  유저 이메일 비밀번호, |  |  |  |
 | 5 | DELETE | /users/register_out/{user_id} | 회원탈퇴 | 유저 아이디, 유저 비밀번호 |  |  | 미구현 |
 | 6 | POST | /sign-api/sign_in | 로그인 | 유저 아이디, 유저 비밀번호 |  |  |  |
@@ -33,7 +33,7 @@ Spring boot 연습용으로 만든 투두리스트입니다.
 
 | INDEX | HTTP METHOD | URI(end point) | Description | Request Parameters | Response Parameters | HTTP Status | etc. |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | GET | /TODO/{today} | 오늘 할 일 조회 | todo의 start날짜와 end 날짜의 사이에 오늘의 날짜가 있는가. |  |  |  |
+| 1 | GET | /TODO/{userid} | 오늘 할 일 조회 | todo의 start날짜와 end 날짜의 사이에 오늘의 날짜가 있는가. |  |  |  |
 | 2 | GET | /TODO | 할일 전체 조회 | 없음. |  |  |  |
 | 3 | GET | /TODO/{todo_id} | 중요한 일 조회  | 중요한 일 여부에 체크가 되어 있는가.(bool) |  |  |  |
 | 4 | GET | /TODO/{title} | 할 일 검색(제목) | title: 검색하고 싶은 제목 |  |  |  |
