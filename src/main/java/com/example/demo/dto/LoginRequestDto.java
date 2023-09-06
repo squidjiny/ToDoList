@@ -17,7 +17,7 @@ public class LoginRequestDto {
 
     @Builder
     public LoginRequestDto(String username,String password){
-        this.username = username;
         this.password = password;
+        this.username = username;
     }
 }

@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.CommonResponse;
+import com.example.demo.domain.User;
 import com.example.demo.dto.LoginRequestDto;
+import com.example.demo.dto.ResponseDto;
 import com.example.demo.dto.UserDto;
 import com.example.demo.dto.UserResponseDto;
 import com.example.demo.service.SignService;
@@ -8,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@Getter
 @RequestMapping("/sign-api")
 public class SignController {
 
@@ -38,17 +43,16 @@ public class SignController {
     }
 
 
-
     @PostMapping(value = "/sign-in")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
             @ApiResponse(responseCode = "400", description = "아이디 혹은 비밀번호가 틀렸습니다."),
     })
-    public ResponseEntity<String> signIn(@Valid @RequestBody LoginRequestDto loginRequestDto)
+    public ResponseEntity<?> signIn(@Valid @RequestBody LoginRequestDto loginRequestDto)
             throws RuntimeException {
         LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", loginRequestDto.getUsername());
         String token = signService.signIn(loginRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body("로그인 성공 \ntoken : " + token);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(CommonResponse.SUCCESS, token));
     }
 
     @PostMapping(value = "/sign-up")
@@ -57,11 +61,11 @@ public class SignController {
             @ApiResponse(responseCode = "400", description = "동일한 아이디가 존재합니다."),
             @ApiResponse(responseCode = "400", description = "이메일 형식이 틀렸습니다.")
     })
-    public ResponseEntity<UserResponseDto> signUp(@Valid @RequestBody UserDto userDto) {
+public ResponseEntity<ResponseDto> signUp(@Valid @RequestBody UserDto userDto) {
         LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****", userDto.getUsername());
-        UserResponseDto responseDto = signService.signUp(userDto);
+        UserResponseDto userResponseDto = signService.signUp(userDto);
         LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", userDto.getUsername());
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(CommonResponse.SUCCESS, userResponseDto));
     }
 
     @GetMapping(value = "/exception")
@@ -69,20 +73,6 @@ public class SignController {
         throw new RuntimeException("접근이 금지되었습니다.");
     }
 
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<Map<String, String>> ExceptionHandler(RuntimeException e) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        //responseHeaders.add(HttpHeaders.CONTENT_TYPE, "application/json");
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 
-        LOGGER.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
-
-        Map<String, String> map = new HashMap<>();
-        map.put("error type", httpStatus.getReasonPhrase());
-        map.put("code", "400");
-        map.put("message", "에러 발생");
-
-        return new ResponseEntity<>(map, responseHeaders, httpStatus);
-    }
 
 }

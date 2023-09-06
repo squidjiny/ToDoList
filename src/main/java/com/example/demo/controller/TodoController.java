@@ -1,16 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.CommonResponse;
 import com.example.demo.domain.Todo;
-import com.example.demo.domain.User;
+import com.example.demo.dto.ResponseDto;
 import com.example.demo.dto.ShortTodoDto;
 import com.example.demo.dto.TodoDto;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.TodoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,10 +43,10 @@ public class TodoController {
             @ApiResponse(responseCode = "201", description = "투두리스트 생성 성공"),
             @ApiResponse(responseCode = "400", description = "투두리스트 생성 실패"),
     })
-    public ResponseEntity<String> write(@RequestBody TodoDto todoDto, long userid){
-        todoService.save(userid, todoDto);
+    public ResponseEntity<ResponseDto> write(@RequestBody TodoDto todoDto, long userid){
+        TodoDto saveTodo = todoService.save(userid, todoDto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("생성완료");
+                .body(new ResponseDto(CommonResponse.SUCCESS, saveTodo));
     }
     @Operation(summary = "투두 삭제", description = "todo(할 일) 들의 삭제기능을 담당함. 삭제하고싶은 Todo의 id를 파라미터로 넣으면 그 id를 가진 Todo가 삭제됨.")
     @DeleteMapping("/{TodoId}")
@@ -56,11 +55,13 @@ public class TodoController {
             @ApiResponse(responseCode = "404", description = "삭제하려는 투두리스트가 없습니다"),
             @ApiResponse(responseCode = "403", description = "삭제 권한이 없습니다.")
     })
-    public ResponseEntity<String> deleteTodo(@PathVariable long TodoId){
+    public ResponseEntity<ResponseDto> deleteTodo(@PathVariable long TodoId){
         todoService.deleteTodo(TodoId);
         return ResponseEntity.status(HttpStatus.OK)
-                .body("정상적으로 글이 삭제되었습니다.");
+                .body(new ResponseDto(CommonResponse.SUCCESS, TodoId));
     }
+
+
 
     //유저의 할 일(투두) 전체조회 (제목이랑 기한만)
     @Operation(summary = "투두 전체조회", description = "userid를 파라미터로 넣으면 그 유저가 가지고 있는 모든 투두의 제목/시작날/마감날/중요여부를 반환함.")
@@ -90,10 +91,10 @@ public class TodoController {
             @ApiResponse(responseCode = "404", description = "수정하려는 투두리스트가 없습니다."),
             @ApiResponse(responseCode = "403", description = "수정 권한이 없습니다.")
     })
-    public ResponseEntity<String> EditTodo(@RequestBody TodoDto todoDto,@PathVariable long todoId) {
+    public ResponseEntity<ResponseDto> EditTodo(@RequestBody TodoDto todoDto,@PathVariable long todoId) {
         todoService.edit(todoId, todoDto);
         return ResponseEntity.status(HttpStatus.OK)
-                .body("수정완료!");
+                .body(new ResponseDto(CommonResponse.SUCCESS, todoDto));
     }
     //오늘 할 일 출력
     @Operation(summary = "오늘 할 일 출력", description = "userid를 파라미터로 넣으면 그 userid가 가지고 있는 투두 중 오늘의 날짜가 시작날과 마감날 사이에 있는 투두를 리스트로 만들어서 투두제목/투두시작날/투두 마감날/중요여부 를 리스트로 반환함.")
@@ -106,8 +107,8 @@ public class TodoController {
 
         List<ShortTodoDto> todayTodos = todos.stream()
                 .filter(todo -> {
-                    LocalDate startDate = todo.getStartDate().toLocalDate();
-                    LocalDate deadDate = todo.getDeadDate().toLocalDate();
+                    LocalDate startDate = todo.getStartDate();
+                    LocalDate deadDate = todo.getDeadDate();
                     return !startDate.isAfter(today) && !deadDate.isBefore(today);
                 })
                 .collect(Collectors.toList());

@@ -13,13 +13,11 @@ public class UserResponseDto {
     private Long userId;
     private String username;
     private String userEmail;
-    private List<Todo> todoList;
 
     @Builder
     public UserResponseDto(User user) {
         this.userId = user.getUserid();
         this.username = user.getUsername();
         this.userEmail = user.getUserEmail();
-        this.todoList = user.getTodoList();
     }
 }

@@ -6,6 +6,7 @@ import com.example.demo.common.Time;
 import com.example.demo.dto.TodoDto;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Table(name = "Todo_tb")
@@ -26,11 +27,11 @@ public class Todo extends Time {
     private String todoTitle;
 
     @Column(nullable = false)
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     //설명
     @Column(nullable = false)
-    private LocalDateTime deadDate;
+    private LocalDate deadDate;
 
     @Column(nullable = false)
     private String todoDescription;
@@ -40,7 +41,7 @@ public class Todo extends Time {
     private boolean isImportant;
 
     @Column(nullable=false)
-    private boolean finishTODO;
+    private boolean isFinished;
 
     @Column(nullable = false)
     private boolean checked;
@@ -49,10 +50,12 @@ public class Todo extends Time {
     @JoinColumn(name = "userid")
     private User user;
 
-    public void EditTODO(TodoDto todoDto){
-        this.todoTitle = todoDto.getTodoTitle();
-        this.startDate = todoDto.getStartDate();
-        this.deadDate = todoDto.getDeadDate();
+    public void EditTodo(TodoDto todoDto){
+        this.isFinished = todoDto.getIsFinished();
         this.isImportant = todoDto.getIsImportant();
+        this.deadDate = todoDto.getDeadDate();
+        this.startDate = todoDto.getStartDate();
+        this.todoDescription = todoDto.getTodoDescription();
+        this.todoTitle = todoDto.getTodoTitle();
     }
 }

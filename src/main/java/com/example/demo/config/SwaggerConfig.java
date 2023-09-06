@@ -35,9 +35,15 @@ public class SwaggerConfig {
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
                 .title("Todolist 스웨거")
-                .description("Todolist 기능을 실험할 수 있는 스웨거.\n" +
-                        "UserController: 회원가입/회원정보수정/회원탈퇴/회원조회\n"+
-                        "TodoController: 투두 생성/검색/수정. 중요한 일/오늘 할 일 조회\n")
+                .description("Todolist 기능을 실험할 수 있는 스웨거.<br> " +
+                        "테스트 계정:<br>" +
+                                "ROLE_USER 계정: userid = 1, username = usertest, password = usertest<br>"+
+                                "ROLE_ADMIN 계정: userid = 2, username = admintest, password = admintest<br>"+
+                        "토큰 발급 방법:<br>"+
+                        "1. signincontroller에서 로그인하고 싶은 역할의 유저의 username과 password를 입력한다.<br>"+
+                        "2. responsebody의 token을 복사한다.<br>"+
+                        "3. 오른쪽 상단의 Authorize를 클릭 후 토큰을 넣어서 로그인한다."
+                        )
                 .version("3.0")
                 .build();
 

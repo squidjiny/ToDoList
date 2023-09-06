@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
     @Getter
     public class Time {
         @CreatedDate
-        private LocalDateTime createdAt;
+        private LocalDateTime createdAtDate;
 
         @LastModifiedDate
-        private LocalDateTime modifiedAt;
+        private LocalDateTime modifiedAtDate;
     }
 
