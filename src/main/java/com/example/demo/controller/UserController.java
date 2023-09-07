@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.CommonResponse;
 import com.example.demo.domain.User;
+import com.example.demo.dto.ResponseDto;
 import com.example.demo.dto.UserDto;
 import com.example.demo.dto.UserRequestDto;
 import com.example.demo.repository.UserRepository;
@@ -36,10 +38,10 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "유저 출력 성공"),
             @ApiResponse(responseCode = "403", description = "조회 권한이 없습니다.")
     })
-    public ResponseEntity<List<UserRequestDto>> getAllUsers() {
+    public ResponseEntity<ResponseDto> getAllUsers() {
         List<UserRequestDto> todos = userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK)
-                .body(todos);
+                .body(new ResponseDto(CommonResponse.SUCCESS, todos));
     }
 
     //유저 이름으로 검색기능
@@ -49,23 +51,23 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "유저 조회 성공"),
             @ApiResponse(responseCode = "404", description = "동일한 유저가 없습니다."),
     })
-    public ResponseEntity<List<User>> SearchUsers(@PathVariable String username) {
+    public ResponseEntity<ResponseDto> SearchUsers(@PathVariable String username) {
         List<User> todos = userService.getAllUserinfo();
 
         List<User> matchingNames = todos.stream()
                 .filter(todo -> todo.getUsername().contains(username))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(matchingNames);
+                .body(new ResponseDto(CommonResponse.SUCCESS, matchingNames));
     }
 
     //유저 정보 수정
     @Operation(summary = "유저 정보 수정", description = "수정하고 싶은 유저의 아이디와 UserDto 양식에서 수정하고 싶은 내용을 수정해서 파라미터로 받으면 수정사항이 반영됨.")
     @PutMapping("edit")
-    public ResponseEntity<String> Edit(long userid, @RequestBody UserDto userDto){
+    public ResponseEntity<ResponseDto> Edit(long userid, @RequestBody UserDto userDto){
         userService.editUser(userid, userDto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("수정완료");
+                .body(new ResponseDto(CommonResponse.SUCCESS, userDto));
     }
 
 

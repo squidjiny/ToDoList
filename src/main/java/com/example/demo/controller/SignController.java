@@ -48,7 +48,7 @@ public class SignController {
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
             @ApiResponse(responseCode = "400", description = "아이디 혹은 비밀번호가 틀렸습니다."),
     })
-    public ResponseEntity<?> signIn(@Valid @RequestBody LoginRequestDto loginRequestDto)
+    public ResponseEntity<ResponseDto> signIn(@Valid @RequestBody LoginRequestDto loginRequestDto)
             throws RuntimeException {
         LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", loginRequestDto.getUsername());
         String token = signService.signIn(loginRequestDto);

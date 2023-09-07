@@ -67,20 +67,20 @@ public class TodoController {
     @Operation(summary = "투두 전체조회", description = "userid를 파라미터로 넣으면 그 유저가 가지고 있는 모든 투두의 제목/시작날/마감날/중요여부를 반환함.")
     @GetMapping("/all/{userid}")
     @ApiResponse(responseCode = "200", description = "전체 조회 성공")
-    public ResponseEntity<List<ShortTodoDto>> getAllTodos(@PathVariable long userid) {
+    public ResponseEntity<ResponseDto> getAllTodos(@PathVariable long userid) {
         List<ShortTodoDto> todos = todoService.getAllTodos(userid);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(todos);
+                .body(new ResponseDto(CommonResponse.SUCCESS, todos));
     }
 
     //유저의 중요한 일 조회
     @Operation(summary = "중요한 투두 조회", description = "userid를 파라미터로 넣으면 todo(할 일) 중 중요한 일 여부(isImportant)가 true인 투두의 제목/시작날/마감날/중요여부를 리스트로 반환함.")
     @GetMapping("/important/{userid}")
     @ApiResponse(responseCode = "200", description = "전체 조회 성공")
-    public ResponseEntity<List<ShortTodoDto>> getImportantTodos(@PathVariable long userid){
+    public ResponseEntity<ResponseDto> getImportantTodos(@PathVariable long userid){
         List<ShortTodoDto> todos = todoService.getImportantTodos(userid);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(todos);
+                .body(new ResponseDto(CommonResponse.SUCCESS, todos));
     }
 
     //할 일 수정하기
@@ -100,7 +100,7 @@ public class TodoController {
     @Operation(summary = "오늘 할 일 출력", description = "userid를 파라미터로 넣으면 그 userid가 가지고 있는 투두 중 오늘의 날짜가 시작날과 마감날 사이에 있는 투두를 리스트로 만들어서 투두제목/투두시작날/투두 마감날/중요여부 를 리스트로 반환함.")
     @GetMapping("/today/{userid}")
     @ApiResponse(responseCode = "200", description = "오늘 할 일 조회 성공")
-    public ResponseEntity<List<ShortTodoDto>> getTodayTodos(@PathVariable long userid){
+    public ResponseEntity<ResponseDto> getTodayTodos(@PathVariable long userid){
         List<ShortTodoDto> todos = todoService.getAllTodos(userid);
 
         LocalDate today = LocalDate.now();
@@ -114,7 +114,7 @@ public class TodoController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(todayTodos);
+                .body(new ResponseDto(CommonResponse.SUCCESS, todayTodos));
 
     }
 
@@ -125,24 +125,24 @@ public class TodoController {
             @ApiResponse(responseCode = "200", description = "투두리스트 제목 조회 성공"),
             @ApiResponse(responseCode = "404", description = "찾으려는 투두리스트가 없습니다.")
     })
-    public ResponseEntity<List<TodoDto>> getTitleSearch(@PathVariable long userid, @PathVariable String keyword) {
+    public ResponseEntity<ResponseDto> getTitleSearch(@PathVariable long userid, @PathVariable String keyword) {
         List<TodoDto> todos = todoService.getUsersAllTodos(userid);
         List<TodoDto> matchingTodos = todos.stream()
                 .filter(todo -> todo.getTodoTitle().contains(keyword))
                 .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(matchingTodos);
+                .body(new ResponseDto(CommonResponse.SUCCESS,matchingTodos));
     }
     //할 일 검색(설명)
     @Operation(summary = "투두 검색(투두 설명)", description = "검색하고 싶은 내용과 유저의 아이디를 파라미터로 넣으면 그 유저가 가지고 있는 투두의 설명(description)에서 검색하고 싶은 내용을 포함하고있는 투두를 리스트로 만들어서 반환함.")
     @GetMapping("/description/{userid}/{keyword}")
-    public ResponseEntity<List<TodoDto>> getDescriptionSearch(@PathVariable long userid, @PathVariable String keyword) {
+    public ResponseEntity<ResponseDto> getDescriptionSearch(@PathVariable long userid, @PathVariable String keyword) {
         List<TodoDto> todos = todoService.getUsersAllTodos(userid);
         List<TodoDto> matchingTodos = todos.stream()
                 .filter(todo -> todo.getTodoDescription().contains(keyword))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(matchingTodos);
+                .body(new ResponseDto(CommonResponse.SUCCESS,matchingTodos));
     }
 }

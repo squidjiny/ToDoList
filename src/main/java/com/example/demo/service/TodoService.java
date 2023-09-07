@@ -65,13 +65,11 @@ public class TodoService {
         //return todoRepository.findByUserUseridAndIsImportant(userid, true);
     }
 
-    public TodoDto edit(long todoId, TodoDto todoDto){
+    public void edit(long todoId, TodoDto todoDto){
         Todo todo = todoRepository.findByTodoId(todoId)
                 .orElseThrow(() -> new RuntimeException());
         todo.EditTodo(todoDto);
         todoRepository.save(todo);
-
-        return todoDto;
     }
         public List<TodoDto> getUsersAllTodos(long userid) {
             List<Todo> todos = todoRepository.findByUserUserid(userid);
