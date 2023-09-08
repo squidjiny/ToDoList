@@ -78,4 +78,14 @@ Spring boot 연습용으로 만든 투두리스트입니다.
 
     왜 PUT, PATCH 중 PUT을 선택했는 지  
     상태코드는 어떤걸 쓰는게 맞는 지 (200, 201, 204, 400, 401...)
+
+
+---
+
+## 협업 링크
+아마존 서버:
+http://ec2-3-36-184-17.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html#/
+
+프론트 레포:
+https://github.com/uselessnaming/todo-list
     
