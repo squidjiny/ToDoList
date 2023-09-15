@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Slf4j
 public class TodoService {
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;

@@ -26,7 +26,7 @@ public class User extends Time implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userid;
+    private Long userid;
 
     //유저이름
     @Column(nullable = false, unique = true)

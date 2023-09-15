@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Getter
 public class SignServiceImpl implements SignService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SignServiceImpl.class);

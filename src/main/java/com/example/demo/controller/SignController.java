@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@Getter
 @RequestMapping("/sign-api")
 public class SignController {
 
@@ -66,11 +65,6 @@ public ResponseEntity<ResponseDto> signUp(@Valid @RequestBody UserDto userDto) {
         UserResponseDto userResponseDto = signService.signUp(userDto);
         LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", userDto.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(CommonResponse.SUCCESS, userResponseDto));
-    }
-
-    @GetMapping(value = "/exception")
-    public void exceptionTest() throws RuntimeException {
-        throw new RuntimeException("접근이 금지되었습니다.");
     }
 
 
