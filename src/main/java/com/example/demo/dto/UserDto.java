@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 import com.example.demo.domain.User;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,9 +14,11 @@ import java.util.List;
 public class UserDto {
 
     @NotBlank
+    @Schema(example = "frogfrog1234")
     private String username;
 
     @NotBlank
+    @Schema(example = "brook")
     private String password;
 
     @Email
@@ -23,7 +26,7 @@ public class UserDto {
     @ApiModelProperty(example = "example@inu.ac.kr")
     private String userEmail;
 
-
+    @Schema(example = "ROLE_USER")
     private List<String> role;
 
     @Builder

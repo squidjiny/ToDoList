@@ -7,6 +7,8 @@ import com.example.demo.dto.ShortTodoDto;
 import com.example.demo.dto.TodoDto;
 import com.example.demo.service.TodoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,9 +42,12 @@ public class TodoController {
     @Operation(summary = "투두 생성", description = "todo(할 일)의 생성 기능을 담당함. TodoDto를 body로 씀. userid와 todoDto(투두리스트 요구사항)을 파라미터로 넣으면 userid의 투두리스트에 투두가 추가됨.")
     @PostMapping
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "투두리스트 생성 성공"),
+            @ApiResponse(responseCode = "201", description = "투두리스트 생성 성공", content = @Content(schema = @Schema(implementation = TodoDto.class))),
             @ApiResponse(responseCode = "400", description = "투두리스트 생성 실패"),
     })
+    @io.swagger.annotations.ApiResponses(
+            @io.swagger.annotations.ApiResponse(code = 200,message = "ok,",response =TodoDto.class)
+    )
     public ResponseEntity<ResponseDto> write(@RequestBody TodoDto todoDto, Long userid){
         TodoDto saveTodo = todoService.save(userid, todoDto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -55,6 +60,10 @@ public class TodoController {
             @ApiResponse(responseCode = "404", description = "삭제하려는 투두리스트가 없습니다"),
             @ApiResponse(responseCode = "403", description = "삭제 권한이 없습니다.")
     })
+
+    @io.swagger.annotations.ApiResponses(
+            @io.swagger.annotations.ApiResponse(code = 200, message = "ok", responseContainer = "1")
+    )
     public ResponseEntity<ResponseDto> deleteTodo(@PathVariable Long TodoId){
         todoService.deleteTodo(TodoId);
         return ResponseEntity.status(HttpStatus.OK)

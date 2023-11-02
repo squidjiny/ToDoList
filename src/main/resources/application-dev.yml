@@ -9,7 +9,7 @@ spring:
   jwt:
     secret: h7J2jZ4Bp8WvE9RfTcYvD1QaL6OzXsCmIuN5rFwTgPqM1eCvK9jX4eTcYvU3xS6z
   datasource:
-    url: jdbc:mysql://localhost:3306/TodoList_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3333/TodoList_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: TodoListUser
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -22,7 +22,7 @@ spring:
     ansi:
       enabled: always
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     open-in-view: false
     show-sql: true
     hibernate:

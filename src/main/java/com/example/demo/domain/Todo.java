@@ -23,24 +23,24 @@ public class Todo extends Time {
     private Long todoId;
 
     //할일 제목
-    @Column(nullable = false)
+    @Column(nullable = false, name = "todo_title")
     private String todoTitle;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "start_date")
     private LocalDate startDate;
 
     //설명
-    @Column(nullable = false)
+    @Column(nullable = false, name = "dead_date")
     private LocalDate deadDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "todo_description")
     private String todoDescription;
 
     //중요한 일 여부
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_important")
     private boolean isImportant;
 
-    @Column(nullable=false)
+    @Column(nullable=false, name = "is_finished")
     private boolean isFinished;
 
     @Column(nullable = false)

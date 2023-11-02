@@ -66,7 +66,7 @@ public class TodoService {
 
     public void edit(long todoId, TodoDto todoDto){
         Todo todo = todoRepository.findByTodoId(todoId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new NotFoundTodoIdException());
         todo.EditTodo(todoDto);
         todoRepository.save(todo);
     }

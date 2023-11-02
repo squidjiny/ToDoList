@@ -1,28 +1,20 @@
 package com.example.demo.controller;
 
 import com.example.demo.common.CommonResponse;
-import com.example.demo.domain.User;
 import com.example.demo.dto.LoginRequestDto;
 import com.example.demo.dto.ResponseDto;
 import com.example.demo.dto.UserDto;
-import com.example.demo.dto.UserResponseDto;
 import com.example.demo.service.SignService;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/sign-api")
@@ -47,6 +39,9 @@ public class SignController {
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
             @ApiResponse(responseCode = "400", description = "아이디 혹은 비밀번호가 틀렸습니다."),
     })
+    @io.swagger.annotations.ApiResponses(
+            @io.swagger.annotations.ApiResponse(code = 200, message = "ok", responseContainer = "토큰값이 들어갑니다. token")
+    )
     public ResponseEntity<ResponseDto> signIn(@Valid @RequestBody LoginRequestDto loginRequestDto)
             throws RuntimeException {
         LOGGER.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", loginRequestDto.getUsername());
@@ -62,9 +57,8 @@ public class SignController {
     })
 public ResponseEntity<ResponseDto> signUp(@Valid @RequestBody UserDto userDto) {
         LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****", userDto.getUsername());
-        UserResponseDto userResponseDto = signService.signUp(userDto);
         LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", userDto.getUsername());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(CommonResponse.SUCCESS, userResponseDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(CommonResponse.SUCCESS, "null"));
     }
 
 
