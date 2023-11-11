@@ -3,6 +3,7 @@ package com.example.demo.domain;
 import javax.persistence.*;
 
 import com.example.demo.common.Time;
+import com.example.demo.dto.ShortTodoDto;
 import com.example.demo.dto.TodoDto;
 import lombok.*;
 
@@ -38,13 +39,10 @@ public class Todo extends Time {
 
     //중요한 일 여부
     @Column(nullable = false, name = "is_important")
-    private boolean isImportant;
+    private Boolean isImportant;
 
     @Column(nullable=false, name = "is_finished")
-    private boolean isFinished;
-
-    @Column(nullable = false)
-    private boolean checked;
+    private Boolean isFinished;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
@@ -57,5 +55,9 @@ public class Todo extends Time {
         this.startDate = todoDto.getStartDate();
         this.todoDescription = todoDto.getTodoDescription();
         this.todoTitle = todoDto.getTodoTitle();
+    }
+
+    public void TodoToggle(Boolean FT){
+        this.isFinished = FT;
     }
 }

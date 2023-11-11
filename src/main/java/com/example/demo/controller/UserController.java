@@ -39,9 +39,9 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "조회 권한이 없습니다.")
     })
     public ResponseEntity<ResponseDto> getAllUsers() {
-        List<UserRequestDto> todos = userService.getAllUsers();
+        List<UserRequestDto> users = userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseDto(CommonResponse.SUCCESS, todos));
+                .body(new ResponseDto(CommonResponse.SUCCESS, users));
     }
 
     //유저 이름으로 검색기능
@@ -52,20 +52,15 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "동일한 유저가 없습니다."),
     })
     public ResponseEntity<ResponseDto> SearchUsers(@PathVariable String username) {
-        List<User> todos = userService.getAllUserinfo();
-
-        List<User> matchingNames = todos.stream()
-                .filter(todo -> todo.getUsername().contains(username))
-                .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseDto(CommonResponse.SUCCESS, matchingNames));
+                .body(new ResponseDto(CommonResponse.SUCCESS, userService.searchAllUsers(username)));
     }
 
     //유저 정보 수정
     @Operation(summary = "유저 정보 수정", description = "수정하고 싶은 유저의 아이디와 UserDto 양식에서 수정하고 싶은 내용을 수정해서 파라미터로 받으면 수정사항이 반영됨.")
     @PutMapping("/edit")
-    public ResponseEntity<ResponseDto> Edit(Long userid, @RequestBody UserDto userDto){
-        userService.editUser(userid, userDto);
+    public ResponseEntity<ResponseDto> Edit(Long clientId, @RequestBody UserDto userDto){
+        userService.editUser(clientId, userDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDto(CommonResponse.SUCCESS, userDto));
     }

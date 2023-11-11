@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService{
@@ -29,16 +30,17 @@ public class UserService{
         return userInfoDtos;
     }
 
-    public List<User> getAllUserinfo(){
-        return userRepository.findAll();
+    public List<UserRequestDto> searchAllUsers(String username){
+        List<User> searchAllUsers = userRepository.findAllByUsernameContains(username);
+
+        List<UserRequestDto> searchUsers = searchAllUsers.stream().map(
+                user -> new UserRequestDto(
+                        user.getUserid(),
+                        user.getUsername()
+                )).collect(Collectors.toList());
+        return searchUsers;
     }
 
-
-//    //유저 회원가입
-//    public void Register(UserDto userDto){
-//        User user = userDto.toEntity(userDto);
-//        userRepository.save(user);
-//    }
 
     //유저 수정
     public void editUser(Long userid, UserDto userDto){
@@ -47,12 +49,6 @@ public class UserService{
         user.EditUser(userDto);
         userRepository.save(user);
     }
-
-//    public void Withdrawal(Long userid){
-//        User user = userRepository.findByUserid(userid)
-//                .orElseThrow(() -> new RuntimeException());
-//        userRepository.delete(user);
-//    }
 
 
 }

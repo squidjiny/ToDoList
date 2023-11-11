@@ -46,7 +46,7 @@ public class TodoController {
             @ApiResponse(responseCode = "400", description = "투두리스트 생성 실패"),
     })
     @io.swagger.annotations.ApiResponses(
-            @io.swagger.annotations.ApiResponse(code = 200,message = "ok,",response =TodoDto.class)
+            @io.swagger.annotations.ApiResponse(code = 201,message = "ok,",response =TodoDto.class)
     )
     public ResponseEntity<ResponseDto> write(@RequestBody TodoDto todoDto, Long userid){
         TodoDto saveTodo = todoService.save(userid, todoDto);
@@ -148,10 +148,23 @@ public class TodoController {
     @GetMapping("/description/{userid}/{keyword}")
     public ResponseEntity<ResponseDto> getDescriptionSearch(@PathVariable Long userid, @PathVariable String keyword) {
         List<TodoDto> todos = todoService.getUsersAllTodos(userid);
-        List<TodoDto> matchingTodos = todos.stream()
+        List<TodoDto> matchingTodos = todos
+                .stream()
                 .filter(todo -> todo.getTodoDescription().contains(keyword))
                 .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(new ResponseDto(CommonResponse.SUCCESS,matchingTodos));
     }
+
+    @Operation(summary = "투두 finished 바꾸기", description = "투두 체크 제어용. isFinished = true에 이거 쓰면 false되고 isFinished =false에 이거 쓰면 true됨")
+    @GetMapping("/{todoId}")
+    public ResponseEntity<ResponseDto> todoReverseCheck(@PathVariable Long todoId) {
+        todoService.reverseTodoFinished(todoId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto(CommonResponse.SUCCESS,"null"));
+    }
+
+
 }

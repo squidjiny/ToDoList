@@ -65,4 +65,14 @@ public class SignServiceImpl implements SignService {
         return token;
     }
 
+    @Override
+    public void duplicationCheck(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if(user.isPresent()){
+            throw new DuplicatedException();
+        }
+
+    }
+
 }

@@ -14,7 +14,7 @@ import java.util.List;
 public class UserDto {
 
     @NotBlank
-    @Schema(example = "frogfrog1234")
+    @Schema(example = "frog1234")
     private String username;
 
     @NotBlank
@@ -26,7 +26,7 @@ public class UserDto {
     @ApiModelProperty(example = "example@inu.ac.kr")
     private String userEmail;
 
-    @Schema(example = "ROLE_USER")
+    @Schema(example = "[\"ROLE_USER\"]")
     private List<String> role;
 
     @Builder

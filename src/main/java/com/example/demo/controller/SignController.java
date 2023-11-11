@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.common.CommonResponse;
+import com.example.demo.domain.User;
 import com.example.demo.dto.LoginRequestDto;
 import com.example.demo.dto.ResponseDto;
 import com.example.demo.dto.UserDto;
+import com.example.demo.dto.UserRequestDto;
 import com.example.demo.service.SignService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -55,12 +57,23 @@ public class SignController {
             @ApiResponse(responseCode = "400", description = "동일한 아이디가 존재합니다."),
             @ApiResponse(responseCode = "400", description = "이메일 형식이 틀렸습니다.")
     })
-public ResponseEntity<ResponseDto> signUp(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<ResponseDto> signUp(@RequestBody UserDto userDto) {
         LOGGER.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****", userDto.getUsername());
         LOGGER.info("[signUp] 회원가입을 완료했습니다. id : {}", userDto.getUsername());
+        signService.signUp(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(CommonResponse.SUCCESS, "null"));
     }
 
+    @PostMapping(value = "/sign-up/{username}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "아이디가 중복되지 않았습니다."),
+            @ApiResponse(responseCode = "400", description = "동일한 아이디가 존재합니다.")
+    })
+    public ResponseEntity<ResponseDto> duplicationCheck(@PathVariable String username){
+        signService.duplicationCheck(username);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(CommonResponse.SUCCESS, "null"));
+    }
 
 
 }
